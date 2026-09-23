@@ -11,7 +11,7 @@ Folder expectations (same project folder as your other tools):
     kb/kb_embeddings_<slug>.json   — one file per tournament
 
 Run:
-    python App.py
+    python app.py
 """
 #checcck
 
