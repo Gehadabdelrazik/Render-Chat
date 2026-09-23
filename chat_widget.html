@@ -1,0 +1,368 @@
+<!-- ============================================================
+  REDtone KL Junior Open — Registration Assistant Widget
+  Drop this snippet before the closing </body> tag of your site.
+  Update API_URL below when you deploy (currently points to localhost for testing).
+============================================================= -->
+<div id="sq-chat-root">
+  <button id="sq-chat-toggle" aria-label="Open registration assistant">
+    <svg id="sq-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 4H20V16H7L4 19V4Z" stroke="white" stroke-width="1.6" stroke-linejoin="round"/>
+      <circle cx="8.5" cy="10" r="1" fill="white"/>
+      <circle cx="12" cy="10" r="1" fill="white"/>
+      <circle cx="15.5" cy="10" r="1" fill="white"/>
+    </svg>
+    <svg id="sq-icon-close" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none;">
+      <path d="M5 5L19 19M19 5L5 19" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <div id="sq-chat-panel">
+    <div id="sq-chat-header">
+      <div id="sq-chat-header-text">
+        <span id="sq-chat-title">Registration Assistant</span>
+        <span id="sq-chat-subtitle">REDtone 18th KL Junior Open</span>
+      </div>
+    </div>
+
+    <div id="sq-chat-messages">
+      <div class="sq-msg sq-msg-bot">
+        Hi! I can help with questions about registration, fees, categories, and accommodation for the 18th KL International Junior Open. What would you like to know?
+      </div>
+    </div>
+
+    <div id="sq-chat-inputbar">
+      <input id="sq-chat-input" type="text" placeholder="Ask a question…" autocomplete="off" />
+      <button id="sq-chat-send" aria-label="Send message">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 12L20 4L14 20L11 13L4 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    <div id="sq-chat-footnote">Answers are based on official tournament documents. For anything unclear, contact sraft_kl@yahoo.com.</div>
+  </div>
+</div>
+
+<style>
+  #sq-chat-root, #sq-chat-root * {
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  :root {
+    --sq-court-black: #14171a;
+    --sq-court-charcoal: #23272b;
+    --sq-red: #c41230;
+    --sq-red-dark: #9c0e26;
+    --sq-line-white: #f5f5f2;
+    --sq-grey: #6b7076;
+    --sq-bg-panel: #ffffff;
+  }
+
+  #sq-chat-root {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999999;
+  }
+
+  #sq-chat-toggle {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: var(--sq-red);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(196, 18, 48, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  #sq-chat-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(196, 18, 48, 0.45);
+  }
+  #sq-chat-toggle:focus-visible {
+    outline: 3px solid var(--sq-line-white);
+    outline-offset: 2px;
+  }
+
+  #sq-chat-panel {
+    position: absolute;
+    bottom: 74px;
+    right: 0;
+    width: 360px;
+    max-width: calc(100vw - 32px);
+    height: 500px;
+    max-height: calc(100vh - 140px);
+    background: var(--sq-bg-panel);
+    border-radius: 14px;
+    box-shadow: 0 16px 48px rgba(20, 23, 26, 0.28);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(20, 23, 26, 0.08);
+  }
+  #sq-chat-panel.sq-open {
+    display: flex;
+  }
+
+  #sq-chat-header {
+    background: var(--sq-court-black);
+    padding: 16px 18px;
+    border-bottom: 3px solid var(--sq-red);
+  }
+  #sq-chat-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  #sq-chat-title {
+    color: var(--sq-line-white);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+  }
+  #sq-chat-subtitle {
+    color: rgba(245, 245, 242, 0.6);
+    font-size: 12px;
+  }
+
+  #sq-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #fafafa;
+  }
+
+  .sq-msg {
+    max-width: 84%;
+    padding: 10px 13px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  .sq-msg-bot {
+    background: #ffffff;
+    border: 1px solid rgba(20, 23, 26, 0.09);
+    color: var(--sq-court-black);
+    align-self: flex-start;
+    border-bottom-left-radius: 3px;
+  }
+  .sq-msg-bot-error {
+    background: #fff8ec;
+    border: 1px solid rgba(196, 130, 18, 0.3);
+    color: #7a5310;
+    align-self: flex-start;
+    border-bottom-left-radius: 3px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .sq-msg-bot-error svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .sq-msg-user {
+    background: var(--sq-court-black);
+    color: var(--sq-line-white);
+    align-self: flex-end;
+    border-bottom-right-radius: 3px;
+  }
+  .sq-msg-typing {
+    background: #ffffff;
+    border: 1px solid rgba(20, 23, 26, 0.09);
+    align-self: flex-start;
+    border-bottom-left-radius: 3px;
+    display: flex;
+    gap: 4px;
+    padding: 12px 14px;
+  }
+  .sq-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--sq-grey);
+    animation: sq-bounce 1.2s infinite ease-in-out;
+  }
+  .sq-dot:nth-child(2) { animation-delay: 0.15s; }
+  .sq-dot:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes sq-bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+    40% { transform: translateY(-4px); opacity: 1; }
+  }
+
+  #sq-chat-inputbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-top: 1px solid rgba(20, 23, 26, 0.08);
+    background: #ffffff;
+  }
+  #sq-chat-input {
+    flex: 1;
+    border: 1px solid rgba(20, 23, 26, 0.15);
+    border-radius: 20px;
+    padding: 9px 14px;
+    font-size: 13.5px;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+  #sq-chat-input:focus {
+    border-color: var(--sq-red);
+  }
+  #sq-chat-send {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: var(--sq-red);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s ease;
+  }
+  #sq-chat-send:hover {
+    background: var(--sq-red-dark);
+  }
+  #sq-chat-send:disabled {
+    background: var(--sq-grey);
+    cursor: not-allowed;
+  }
+
+  #sq-chat-footnote {
+    font-size: 10.5px;
+    color: var(--sq-grey);
+    text-align: center;
+    padding: 6px 12px 10px;
+    background: #ffffff;
+  }
+
+  @media (max-width: 420px) {
+    #sq-chat-panel {
+      width: calc(100vw - 24px);
+      right: -12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #sq-chat-toggle, .sq-dot { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<script>
+(function () {
+  // ── Update this when you deploy to SiteGround or elsewhere ──
+  const API_URL = "http://localhost:5000/chat";
+
+  // Your website should set BOTH of these before this script runs:
+  //   window.sqUserRole = "coach";           // or "player", or leave unset
+  //   window.sqTournamentId = "redtone-2026"; // must match the slug used when building that tournament's KB
+  function getUserRole() {
+    return window.sqUserRole || null;
+  }
+  // Your website should set window.sqTournamentId before this script runs, based
+  // on which tournament's page this is. For local testing, this defaults to
+  // "try-thrice" so you don't need to re-set it in the console every reload —
+  // remove this default before embedding on a real site.
+  function getTournamentId() {
+    return window.sqTournamentId || "try-thrice";
+  }
+
+  const toggleBtn = document.getElementById("sq-chat-toggle");
+  const panel = document.getElementById("sq-chat-panel");
+  const iconOpen = document.getElementById("sq-icon-open");
+  const iconClose = document.getElementById("sq-icon-close");
+  const messages = document.getElementById("sq-chat-messages");
+  const input = document.getElementById("sq-chat-input");
+  const sendBtn = document.getElementById("sq-chat-send");
+
+  let isOpen = false;
+
+  function togglePanel() {
+    isOpen = !isOpen;
+    panel.classList.toggle("sq-open", isOpen);
+    iconOpen.style.display = isOpen ? "none" : "block";
+    iconClose.style.display = isOpen ? "block" : "none";
+    if (isOpen) input.focus();
+  }
+
+  function addMessage(text, sender, isError) {
+    const div = document.createElement("div");
+    if (sender === "user") {
+      div.className = "sq-msg sq-msg-user";
+      div.textContent = text;
+    } else if (isError) {
+      div.className = "sq-msg sq-msg-bot-error";
+      div.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 9V13M12 17H12.01M10.29 3.86L1.82 18A2 2 0 0 0 3.54 21H20.46A2 2 0 0 0 22.18 18L13.71 3.86A2 2 0 0 0 10.29 3.86Z" stroke="#c48212" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span></span>';
+      div.querySelector("span").textContent = text;
+    } else {
+      div.className = "sq-msg sq-msg-bot";
+      div.textContent = text;
+    }
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+  }
+
+  function showTyping() {
+    const div = document.createElement("div");
+    div.className = "sq-msg-typing";
+    div.id = "sq-typing-indicator";
+    div.innerHTML = '<span class="sq-dot"></span><span class="sq-dot"></span><span class="sq-dot"></span>';
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function hideTyping() {
+    const el = document.getElementById("sq-typing-indicator");
+    if (el) el.remove();
+  }
+
+  async function sendMessage() {
+    const question = input.value.trim();
+    if (!question) return;
+
+    addMessage(question, "user");
+    input.value = "";
+    sendBtn.disabled = true;
+    showTyping();
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question, role: getUserRole(), tournament: getTournamentId() }),
+      });
+      const data = await res.json();
+      hideTyping();
+      if (data.answer) {
+        addMessage(data.answer, "bot", !!data.is_error);
+      } else {
+        addMessage("Sorry, something went wrong. Please try again or contact sraft_kl@yahoo.com.", "bot", true);
+      }
+    } catch (err) {
+      hideTyping();
+      addMessage("I couldn't reach the assistant just now. Please check your connection and try again.", "bot", true);
+    } finally {
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+
+  toggleBtn.addEventListener("click", togglePanel);
+  sendBtn.addEventListener("click", sendMessage);
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") sendMessage();
+  });
+})();
+</script>
