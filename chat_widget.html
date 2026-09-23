@@ -262,7 +262,7 @@
 <script>
 (function () {
   // ── Update this when you deploy to SiteGround or elsewhere ──
-  const API_URL = "http://localhost:5000/chat";
+  const API_URL = "https://render-chat-jy8g.onrender.com/chat";
 
   // Your website should set BOTH of these before this script runs:
   //   window.sqUserRole = "coach";           // or "player", or leave unset
@@ -270,13 +270,7 @@
   function getUserRole() {
     return window.sqUserRole || null;
   }
-  // Your website should set window.sqTournamentId before this script runs, based
-  // on which tournament's page this is. For local testing, this defaults to
-  // "try-thrice" so you don't need to re-set it in the console every reload —
-  // remove this default before embedding on a real site.
-  function getTournamentId() {
-    return window.sqTournamentId || "try-thrice";
-  }
+  
 
   const toggleBtn = document.getElementById("sq-chat-toggle");
   const panel = document.getElementById("sq-chat-panel");
