@@ -345,6 +345,7 @@
         addMessage("Sorry, something went wrong. Please try again or contact sraft_kl@yahoo.com.", "bot", true);
       }
     } catch (err) {
+      console.error("WIDGET FETCH ERROR:", err);
       hideTyping();
       addMessage("I couldn't reach the assistant just now. Please check your connection and try again.", "bot", true);
     } finally {
