@@ -13,7 +13,7 @@ Folder expectations (same project folder as your other tools):
 Run:
     python app.py
 """
-#checcck
+
 
 
 import os
@@ -113,7 +113,7 @@ def answer_question(question: str, tournament: str, role: str = None) -> dict:
             time.sleep(1.5 * (attempt + 1))
 
     return {
-        "answer": "I'm getting a lot of questions right now and can't respond at the moment. Please try again in a minute, or email sraft_kl@yahoo.com if it's urgent.",
+        "answer": "I'm getting a lot of questions right now and can't respond at the moment. Please try again in a minute, or contact them directly if it's urgent.",
         "sources": [],
         "is_error": True,
         "error_detail": last_error,

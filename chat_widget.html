@@ -1,7 +1,7 @@
 <!-- ============================================================
   REDtone KL Junior Open — Registration Assistant Widget
   Drop this snippet before the closing </body> tag of your site.
-  Update API_URL below when you deploy (currently points to localhost for testing).
+  API_URL deployed and points at Render.
 ============================================================= -->
 <div id="sq-chat-root">
   <button id="sq-chat-toggle" aria-label="Open registration assistant">
@@ -154,6 +154,13 @@
     align-self: flex-start;
     border-bottom-left-radius: 3px;
   }
+  .sq-msg-bot ul {
+    margin: 4px 0;
+    padding-left: 18px;
+  }
+  .sq-msg-bot li {
+    margin: 2px 0;
+  }
   .sq-msg-bot-error {
     background: #fff8ec;
     border: 1px solid rgba(196, 130, 18, 0.3);
@@ -304,11 +311,44 @@
       div.querySelector("span").textContent = text;
     } else {
       div.className = "sq-msg sq-msg-bot";
-      div.textContent = text;
+      div.innerHTML = formatAnswer(text);
     }
     messages.appendChild(div);
     messages.scrollTop = messages.scrollHeight;
     return div;
+  }
+
+  // Converts the small subset of Markdown Gemini uses (bold, italic, bullet
+  // lists, headings, line breaks) into HTML. The text is HTML-escaped first,
+  // so an answer can never inject markup into the page.
+  function formatInline(line) {
+    return line
+      .replace(/\*\*\*(.+?)\*\*\*/g, "<b><i>$1</i></b>")
+      .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
+      .replace(/(^|[^*])\*(?!\s)([^*]+?)\*(?!\*)/g, "$1<i>$2</i>");
+  }
+
+  function formatAnswer(text) {
+    const escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    let html = "";
+    let inList = false;
+    escaped.split("\n").forEach(function (line) {
+      const item = line.match(/^\s*[*\-•]\s+(.*)/);
+      if (item) {
+        if (!inList) { html += "<ul>"; inList = true; }
+        html += "<li>" + formatInline(item[1]) + "</li>";
+        return;
+      }
+      if (inList) { html += "</ul>"; inList = false; }
+      const heading = line.match(/^\s*#{1,6}\s+(.*)/);
+      html += (heading ? "<b>" + formatInline(heading[1]) + "</b>" : formatInline(line.trim())) + "<br>";
+    });
+    if (inList) html += "</ul>";
+    return html
+      .replace(/(<br>)+(?=<ul>)/g, "")       // no gap before a list
+      .replace(/<\/ul>(<br>)+/g, "</ul>")    // or after it
+      .replace(/(<br>){3,}/g, "<br><br>")    // collapse runs of blank lines
+      .replace(/^(<br>)+|(<br>)+$/g, "");    // trim leading/trailing breaks
   }
 
   function showTyping() {
