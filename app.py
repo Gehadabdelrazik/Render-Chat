@@ -124,6 +124,24 @@ app = Flask(__name__)
 CORS(app)  # tighten to your real domain(s) before deploying anywhere public
 
 
+@app.route("/", methods=["GET"])
+def home():
+    """Simple health check, so opening the server URL in a browser shows it's running."""
+    sites = sorted(
+        f[len("kb_embeddings_"):-len(".json")]
+        for f in os.listdir(KB_DIR)
+        if f.startswith("kb_embeddings_") and f.endswith(".json")
+    ) if os.path.isdir(KB_DIR) else []
+    return jsonify({
+        "status": "Chatbot server is running",
+        "sites": sites,
+        "endpoints": {
+            "POST /chat": "Ask a question: {question, tournament, role}",
+            "GET /kb-status?tournament=<slug>": "Check a site's knowledge base is loaded",
+        },
+    })
+
+
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
